@@ -56,7 +56,7 @@ export default function Home() {
     const signer = provider.getSigner()
     const contract = new ethers.Contract(nftmarketaddress, Market.abi, signer)
 
-    /* user will be prompted to pay the asking proces to complete the transaction */
+    /* user will be prompted to pay the asking process to complete the transaction */
     const price = ethers.utils.parseUnits(nft.price.toString(), 'ether')   
     const transaction = await contract.createMarketSale(nftaddress, nft.tokenId, {
       value: price
