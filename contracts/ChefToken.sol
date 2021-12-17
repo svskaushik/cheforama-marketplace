@@ -19,27 +19,24 @@ contract ChefToken {
     event Approval(address indexed owner, address indexed spender, uint256 amount);
     
     //Variables
-    uint public totalSupply = 5000000000*10**18;
     string public name = "CHEFORAMA";
     string public symbol = "CHEF";
     uint public decimals = 18;
+    uint public totalSupply = 5000000000*10**18;
     uint public limit = 150000000*10**18;
     address owner;
-    mapping(address => mapping(address => uint256)) public allowance;
+    mapping(address => mapping(address => uint256)) public allowed;
     mapping (address => uint) public balances;
     
-    function balanceOf(address _owner) public view returns(uint){
-        return balances[_owner];
-    }
-    
-    
-    
-
     
     constructor (address founder) {
 	owner = founder;
     balances[msg.sender] = totalSupply * 6 /100;
 	balances[founder] = totalSupply *94 /100;
+    }
+
+    function balanceOf(address _owner) public view returns(uint){
+        return balances[_owner];
     }
     
     function ChangeOwner (address _newOwner) OnlyOwner public {
@@ -68,17 +65,21 @@ contract ChefToken {
 
     function approve(address _spender, uint256 _amount) public returns (bool success) {
         require(_spender != address(0));
-        allowance[msg.sender][_spender] = _amount;
+        allowed[msg.sender][_spender] = _amount;
         emit Approval(msg.sender, _spender, _amount);
         return true;
     }
 
     function transferFrom(address _from, address _to, uint256 _amount) public returns (bool success) {
         require(_amount <= balanceOf[_from]);
-        require(_amount <= allowance[_from][msg.sender]);
-        allowance[_from][msg.sender] = allowance[_from][msg.sender].sub(_amount);
+        require(_amount <= allowed[_from][msg.sender]);
+        allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_amount);
         _transfer(_from, _to, _amount);
         return true;
+    }
+
+    function allowance(address _owner, address _spender) public view returns (uint256 remaining) {
+        return allowed[_owner][_spender];
     }
     
     function _transfer(adress _from, address _to, uint _amount) public returns(bool) {
