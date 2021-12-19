@@ -7,7 +7,7 @@ import Spinner from "./Components/Spinner.js"
 
 
 import {
-  nftaddress, nftmarketaddress
+  nftaddress, nftmarketaddress, paymentTokenAddress
 } from '../config'
 
 import NFT from '../artifacts/contracts/NFT.sol/NFT.json'
@@ -55,12 +55,13 @@ export default function Home() {
     const provider = new ethers.providers.Web3Provider(connection)
     const signer = provider.getSigner()
     const contract = new ethers.Contract(nftmarketaddress, Market.abi, signer)
+    const token = new ethers.Contract(paymentTokenAddress, Token.abi, signer)
 
     /* user will be prompted to pay the asking process to complete the transaction */
+    const approval = await token.approve(nftmarketaddress, nft.price)
     const price = ethers.utils.parseUnits(nft.price.toString(), 'ether')   
-    const transaction = await contract.createMarketSale(nftaddress, nft.tokenId, {
-      value: price
-    })
+    const transaction = await contract.createMarketSale(nftaddress, nft.tokenId, paymentTokenAddress)
+    await approval.wait()
     await transaction.wait()
     loadNFTs()
   }
