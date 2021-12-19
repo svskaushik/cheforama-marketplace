@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 import "hardhat/console.sol";
+import "./Token.sol";
 
 contract NFTMarket is ReentrancyGuard {
   using Counters for Counters.Counter;
@@ -22,8 +23,8 @@ contract NFTMarket is ReentrancyGuard {
       uint itemId;
       address nftContract;
       uint256 tokenId;
-      address payable seller;
-      address payable owner;
+      address seller;
+      address owner;
       uint256 price;
       bool sold;
   }
@@ -50,9 +51,9 @@ contract NFTMarket is ReentrancyGuard {
     address nftContract,
     uint256 tokenId,
     uint256 price
-  ) public payable nonReentrant {
+  ) public nonReentrant {
     require(price > 0, "Price must be at least 1 wei");
-    require(msg.value == listingPrice, "Price must be equal to listing price");
+    require(Token(paymentTokenAddress).transferFrom(msg.sender, address(this), listingPrice ), "Payment must be equal to listing price");
 
     _itemIds.increment();
     uint256 itemId = _itemIds.current();
@@ -84,18 +85,18 @@ contract NFTMarket is ReentrancyGuard {
   /* Transfers ownership of the item, as well as funds between parties */
   function createMarketSale(
     address nftContract,
-    uint256 itemId
-    ) public payable nonReentrant {
+    uint256 itemId,
+    address paymentTokenAddress
+    ) public nonReentrant {
     uint price = idToMarketItem[itemId].price;
     uint tokenId = idToMarketItem[itemId].tokenId;
-    require(msg.value == price, "Please submit the asking price in order to complete the purchase");
+    require(Token(paymentTokenAddress).transferFrom(msg.sender, idToMarketItem[itemId].seller, price ), "Please submit the asking price in order to complete the purchase");
 
-    idToMarketItem[itemId].seller.transfer(msg.value);
     IERC721(nftContract).transferFrom(address(this), msg.sender, tokenId);
-    idToMarketItem[itemId].owner = payable(msg.sender);
+    idToMarketItem[itemId].owner = msg.sender;
     idToMarketItem[itemId].sold = true;
     _itemsSold.increment();
-    payable(owner).transfer(listingPrice);
+    Token(paymentTokenAddress).transfer(owner, listingPrice);
   }
 
   /* Returns all unsold market items */
