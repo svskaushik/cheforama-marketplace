@@ -50,7 +50,8 @@ contract NFTMarket is ReentrancyGuard {
   function createMarketItem(
     address nftContract,
     uint256 tokenId,
-    uint256 price
+    uint256 price,
+    address paymentTokenAddress
   ) public nonReentrant {
     require(price > 0, "Price must be at least 1 wei");
     require(Token(paymentTokenAddress).transferFrom(msg.sender, address(this), listingPrice ), "Payment must be equal to listing price");
