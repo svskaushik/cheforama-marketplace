@@ -12,6 +12,7 @@ import {
 
 import NFT from '../artifacts/contracts/NFT.sol/NFT.json'
 import Market from '../artifacts/contracts/NFTMarket.sol/NFTMarket.json'
+import Token from '../artifacts/contracts/NFT.sol/Token.json'
 
 export default function Home() {
   const [nfts, setNfts] = useState([])
@@ -55,11 +56,11 @@ export default function Home() {
     const provider = new ethers.providers.Web3Provider(connection)
     const signer = provider.getSigner()
     const contract = new ethers.Contract(nftmarketaddress, Market.abi, signer)
-    const token = new ethers.Contract(paymentTokenAddress, Token.abi, signer)
+    const paymentToken = new ethers.Contract(paymentTokenAddress, Token.abi, signer)
 
     /* user will be prompted to pay the asking process to complete the transaction */
-    const approval = await token.approve(nftmarketaddress, nft.price)
-    const price = ethers.utils.parseUnits(nft.price.toString(), 'ether')   
+    const price = ethers.utils.parseUnits(nft.price.toString(), 'ether') 
+    const approval = await paymentToken.approve(nftmarketaddress, price)  
     const transaction = await contract.createMarketSale(nftaddress, nft.tokenId, paymentTokenAddress)
     await approval.wait()
     await transaction.wait()

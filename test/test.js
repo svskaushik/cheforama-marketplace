@@ -12,6 +12,12 @@ describe("NFTMarket", function() {
     await nft.deployed()
     const nftContractAddress = nft.address
 
+    /* deploy the payment token contract */
+    const Token = await ethers.getContractFactory("Token")
+    const token = await Token.deploy()
+    await token.deployed()
+    const paymentTokenAddress = token.address
+
     let listingPrice = await market.getListingPrice()
     listingPrice = listingPrice.toString()
 
@@ -22,13 +28,13 @@ describe("NFTMarket", function() {
     await nft.createToken("https://www.mytokenlocation2.com")
 
     /* put both tokens for sale */
-    await market.createMarketItem(nftContractAddress, 1, auctionPrice, { value: listingPrice })
-    await market.createMarketItem(nftContractAddress, 2, auctionPrice, { value: listingPrice })
+    await market.createMarketItem(nftContractAddress, 1, auctionPrice, paymentTokenAddress)
+    await market.createMarketItem(nftContractAddress, 2, auctionPrice, paymentTokenAddress)
 
     const [_, buyerAddress] = await ethers.getSigners()
 
-    /* execute sale of token to another user */
-    await market.connect(buyerAddress).createMarketSale(nftContractAddress, 1, { value: auctionPrice})
+    /* execute sale of NFT token to another user */
+    await market.connect(buyerAddress).createMarketSale(nftContractAddress, 1, paymentTokenAddress)
 
     /* query for and return the unsold items */
     items = await market.fetchMarketItems()
