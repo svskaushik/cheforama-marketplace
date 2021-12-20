@@ -12,7 +12,7 @@ import {
 
 import NFT from '../artifacts/contracts/NFT.sol/NFT.json'
 import Market from '../artifacts/contracts/NFTMarket.sol/NFTMarket.json'
-import Token from '../artifacts/contracts/NFT.sol/Token.json'
+import Token from '../artifacts/contracts/Token.sol/Token.json'
 
 export default function CreateItem() {
   const [fileUrl, setFileUrl] = useState(null)

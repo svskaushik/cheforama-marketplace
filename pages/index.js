@@ -12,7 +12,7 @@ import {
 
 import NFT from '../artifacts/contracts/NFT.sol/NFT.json'
 import Market from '../artifacts/contracts/NFTMarket.sol/NFTMarket.json'
-import Token from '../artifacts/contracts/NFT.sol/Token.json'
+import Token from '../artifacts/contracts/Token.sol/Token.json'
 
 export default function Home() {
   const [nfts, setNfts] = useState([])
@@ -22,7 +22,7 @@ export default function Home() {
   }, [])
   async function loadNFTs() {
     /* create a generic provider and query for unsold market items */
-    const provider = new ethers.providers.JsonRpcProvider("https://rpc-mumbai.maticvigil.com/")
+    const provider = new ethers.providers.JsonRpcProvider()
     const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider)
     const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, provider)
     const data = await marketContract.fetchMarketItems()
