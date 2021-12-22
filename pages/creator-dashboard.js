@@ -63,7 +63,7 @@ export default function CreatorDashboard() {
               <div key={i} className="pt-2 shadow-lg rounded-lg overflow-hidden transform transition duration-500 hover:scale-105">
                 <img src={nft.image} className="rounded-t-lg" onClick={() => window.open(nft.image)} role="button"/>
                 <div className="p-4 bg-black bg-opacity-50">
-                  <p className="text-2xl font-bold text-white">Price - {nft.price} Matic</p>
+                  <p className="text-2xl font-bold text-white">Price - {nft.price} CHEF</p>
                 </div>
               </div>
             ))
@@ -81,7 +81,7 @@ export default function CreatorDashboard() {
                     <div key={i} className="shadow-lg rounded-lg overflow-hidden transform transition duration-500 hover:scale-105">
                       <img src={nft.image} className="rounded-t-lg" onClick={() => window.open(nft.image)} role="button"/>
                       <div className="p-4 bg-black bg-opacity-50">
-                        <p className="text-2xl font-bold text-white">Price - {nft.price} Matic</p>
+                        <p className="text-2xl font-bold text-white">Price - {nft.price} CHEF</p>
                       </div>
                     </div>
                   ))

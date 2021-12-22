@@ -28,7 +28,7 @@ export default function MyAssets() {
 
     const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, signer)
     const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider)
-    const data = await marketContract.fetchMyNFTs().catch(window.alert('Network not found, please ensure that you are connected to the Mumbai testnet'))
+    const data = await marketContract.fetchMyNFTs()
 
     const items = await Promise.all(data.map(async i => {
       const tokenUri = await tokenContract.tokenURI(i.tokenId)
@@ -59,7 +59,7 @@ export default function MyAssets() {
               <div key={i} className="shadow-lg rounded-lg overflow-hidden transform transition duration-500 hover:scale-105 animate-loadtransition">
                 <img src={nft.image} className="rounded-t" onClick={() => window.open(nft.image)} role="button"/>
                 <div className="p-4 bg-black bg-opacity-50">
-                  <p className="text-2xl font-bold text-white">Price - {nft.price} Matic</p>
+                  <p className="text-2xl font-bold text-white">Price - {nft.price} CHEF</p>
                 </div>
               </div>
             ))

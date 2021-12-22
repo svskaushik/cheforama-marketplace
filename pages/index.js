@@ -22,7 +22,7 @@ export default function Home() {
   }, [])
   async function loadNFTs() {
     /* create a generic provider and query for unsold market items */
-    const provider = new ethers.providers.JsonRpcProvider()
+    const provider = new ethers.providers.JsonRpcProvider("https://data-seed-prebsc-1-s1.binance.org:8545/")
     const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider)
     const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, provider)
     const data = await marketContract.fetchMarketItems()
@@ -75,9 +75,9 @@ export default function Home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-start gap-4 pt-4">
           {
             nfts.map((nft, i) => (
-              <div key={i} className="group shadow-xl rounded-lg overflow-hidden transform transition duration-500 hover:scale-105">                
+              <div key={i} className="group shadow-xl shadow-blue-500/50 rounded-lg overflow-hidden transform transition duration-500 hover:scale-105">                
                 <div className="flex justify-center overflow-hidden">
-                <img src={nft.image} className="transform transition duration-500 hover:scale-110 max-h-48" onClick={() => window.open(nft.image)} role="button" />    
+                <img src={nft.image} className="transform transition duration-500 hover:scale-110 " onClick={() => window.open(nft.image)} role="button" />    
                 </div>
                 <div className="p-4 bg-white bg-opacity-5 group-hover:bg-opacity-10 transition duration-500">
                   <p style={{ height: '64px' }} className="text-2xl font-semibold text-gray-200">{nft.name}</p>
@@ -86,7 +86,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="p-4 bg-black bg-opacity-40 group-hover:bg-opacity-50 transition duration-500  ">
-                  <p className="text-2xl mb-4 font-bold text-white">{nft.price} Matic</p>
+                  <p className="text-2xl mb-4 font-bold text-white">{nft.price} CHEF</p>
                   <button className="w-full bg-pink-500 text-white font-bold py-2 px-2 rounded transform transition duration-500 hover:scale-110" onClick={() => buyNft(nft)}>Buy</button>
                 </div>
               </div>

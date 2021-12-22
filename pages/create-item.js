@@ -84,17 +84,17 @@ export default function CreateItem() {
       <div className="w-3/4 sm:w-1/2 flex flex-col pb-12">
         <input 
           placeholder="Asset Name"
-          className="mt-8 rounded p-6 bg-black bg-opacity-40 shadow transition duration-500 hover:shadow-2xl focus:shadow-inner"
+          className="mt-8 rounded p-6 bg-white bg-opacity-20 shadow transition duration-500 hover:shadow-2xl focus:shadow-inner"
           onChange={e => updateFormInput({ ...formInput, name: e.target.value })}
         />
         <textarea
           placeholder="Asset Description"
-          className="mt-4 rounded p-6 bg-black bg-opacity-40 shadow transition duration-500 hover:shadow-2xl focus:shadow-inner"
+          className="mt-4 rounded p-6 bg-white bg-opacity-20 shadow transition duration-500 hover:shadow-2xl focus:shadow-inner"
           onChange={e => updateFormInput({ ...formInput, description: e.target.value })}
         />
         <input
-          placeholder="Asset Price in Matic"
-          className="mt-4 rounded p-6 bg-black bg-opacity-40 shadow transition duration-500 hover:shadow-2xl focus:shadow-inner"
+          placeholder="Asset Price in CHEF"
+          className="mt-4 rounded p-6 bg-white bg-opacity-20 shadow transition duration-500 hover:shadow-2xl focus:shadow-inner"
           onChange={e => updateFormInput({ ...formInput, price: e.target.value })}
         />
         <label className="flex flex-col items-center px-4 py-2 mt-4 bg-pink-500 text-white rounded shadow-md tracking-wide font-semibold cursor-pointer transform transition duration-500 hover:scale-105">
@@ -108,7 +108,7 @@ export default function CreateItem() {
         </label>
         {
           fileUrl && (
-            <img className="rounded mt-4" width="350" src={fileUrl} />
+            <img className="rounded mt-4 self-center" width="350" src={fileUrl} />
           )
         }
         <button onClick={createMarket} className="bg-pink-500 text-white tracking-wide transform transition duration-500 hover:scale-105 font-bold mt-4 rounded p-4 shadow-lg">

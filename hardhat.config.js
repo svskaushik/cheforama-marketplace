@@ -1,6 +1,6 @@
 require("@nomiclabs/hardhat-waffle");
 require('dotenv').config();
-const projectId = process.env.ALCHEMY_API_KEY
+const projectId = process.env.API_KEY
 const privateKey = process.env.KEY
 
 
@@ -9,8 +9,8 @@ module.exports = {
     hardhat: {
       chainId: 1337,
     },
-    mumbai: {
-      url: `https://polygon-mumbai.g.alchemy.com/v2/${projectId}`,
+    bsctestnet: {
+      url: `https://bsc.getblock.io/testnet/?api_key=${projectId}`,
       accounts: [privateKey]
     }
   },

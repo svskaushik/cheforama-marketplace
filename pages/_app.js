@@ -17,9 +17,13 @@ function MyApp({ Component, pageProps }) {
   return (
 
     <div className="min-h-screen bg-bg sm:bg-svg">
-    <title>Metaverse Marketplace </title>
-      <nav className="border-b-2 p-4">
-        <p className="text-4xl font-bold text-gray-300 text-center z-10">Metaverse Marketplace</p>
+    <title>WeChef</title>
+      <nav className="border-b p-4">
+        <div className="flex p-0 m-0 justify-between">
+        <img src="cheforama-logo-2edit.png" className=" w-16 h-16" />
+        <p className="text-4xl font-bold text-gray-300 text-center z-10 px-20 ">WeChef</p>
+        <button className="rounded-lg h-1/2 bg-blue-400 transition duration-500 font-semibold hover:bg-blue-600 ">Under Development</button>
+        </div>
         <div className="flex mt-4 justify-between overflow-x-scroll sm:overflow-hidden pt-4 pl-2 pb-1">
           <div className="flex">
             <Link href="/"> 

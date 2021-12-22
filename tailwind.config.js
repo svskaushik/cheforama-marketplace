@@ -1,6 +1,6 @@
 module.exports = {
   purge: [],
-  darkMode: false, // or 'media' or 'class'
+
   theme: {
     extend: {
       keyframes: {
@@ -11,10 +11,11 @@ module.exports = {
       },
       animation: {
         loadtransition : 'loadtransition 1s ease-in-out',
+        pingslow : 'ping 1s ease-in-out infinite',
       },  
       backgroundImage: {
-        'bg': "linear-gradient(180deg, rgba(30,62,124,1) 0%, rgba(3,88,95,1) 21%, rgba(3,88,95,1) 75%, rgba(30,62,124,1) 100%);",
-        'svg': "url('~/img/test.svg')",
+        'bg': "url('~/img/bg.jpg')",
+        'svg': "url('~/img/wave.svg')",
       },
       colors: {
         glass: {
