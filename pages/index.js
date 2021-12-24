@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Web3Modal from "web3modal"
 import Spinner from "./Components/Spinner.js"
-
+import dynamic from 'next/dynamic'
 
 
 import {
@@ -17,6 +17,9 @@ import Token from '../artifacts/contracts/Token.sol/Token.json'
 export default function Home() {
   const [nfts, setNfts] = useState([])
   const [loadingState, setLoadingState] = useState('not-loaded')
+  const ReactImageAppear = dynamic(() => import('react-image-appear'), {
+      ssr: false
+  });
   useEffect(() => {
     loadNFTs()
   }, [])
@@ -77,7 +80,7 @@ export default function Home() {
             nfts.map((nft, i) => (
               <div key={i} className="group shadow-xl shadow-blue-500/50 rounded-lg overflow-hidden transform transition duration-500 hover:scale-105">                
                 <div className="flex justify-center overflow-hidden">
-                <img src={nft.image} className="transform transition duration-500 hover:scale-110 " onClick={() => window.open(nft.image)} role="button" />    
+                <ReactImageAppear animationDuration="1s" loader="infinityloader.svg" src={nft.image} className="transform transition duration-500 hover:scale-110 " onClick={() => window.open(nft.image)} role="button" />    
                 </div>
                 <div className="p-4 bg-white bg-opacity-5 group-hover:bg-opacity-10 transition duration-500">
                   <p style={{ height: '64px' }} className="text-2xl font-semibold text-gray-200">{nft.name}</p>
