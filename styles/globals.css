@@ -5,7 +5,7 @@
 @layer utilities {
   ::-webkit-scrollbar {
     width: 8px;
-    height: 0px;
+    height: 2px;
   }
 
   ::-webkit-scrollbar-track {
@@ -34,4 +34,8 @@ html,body{
     scroll-behavior: smooth;
 }
 
-
+@media only screen and (max-width: 1024px) {
+    #parallax {
+        display: none;
+    }
+}

@@ -40,7 +40,6 @@ function WalletConnectButton() {
     const MetaMaskClientCheck = () => {
         if (!isMetaMaskInstalled()) {
             setBtnText("Install Metamask");
-            console.log("Hello")
         } else {
             setBtnText("Connect");
         }
@@ -149,7 +148,7 @@ function WalletConnectButton() {
 
     return (
         <div>
-            <button className="rounded-full font-bold px-4 bg-blue-400 bg-opacity-20 transition duration-500 hover:bg-opacity-70 transform hover:-translate-y-1" onClick={metaMaskInstalled ? onClickConnect : onClickInstall} disabled={isDisabled}>{btnText}</button>       
+            <button className="rounded-full font-medium px-4 text-gray-300 bg-blue-400 bg-opacity-20 transition duration-500 hover:bg-opacity-70 transform hover:-translate-y-1" onClick={metaMaskInstalled ? onClickConnect : onClickInstall} disabled={isDisabled}>{btnText}</button>       
         </div>
     )
 }

@@ -19,36 +19,41 @@ export default function CreatorDashboard() {
     loadNFTs()
   }, [])
   async function loadNFTs() {
-    const web3Modal = new Web3Modal({
-      cacheProvider: true,
-    })
-    const connection = await web3Modal.connect()
-    const provider = new ethers.providers.Web3Provider(connection)
-    const signer = provider.getSigner()
+    if (window.ethereum) {
+      const web3Modal = new Web3Modal({
+        cacheProvider: true,
+      })
+      const connection = await web3Modal.connect()
+      const provider = new ethers.providers.Web3Provider(connection)
+      const signer = provider.getSigner()
 
-    const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, signer)
-    const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider)
-    const data = await marketContract.fetchItemsCreated()
+      const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, signer)
+      const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider)
+      const data = await marketContract.fetchItemsCreated()
 
-    const items = await Promise.all(data.map(async i => {
-      const tokenUri = await tokenContract.tokenURI(i.tokenId)
-      const meta = await axios.get(tokenUri)
-      let price = ethers.utils.formatUnits(i.price.toString(), 'ether')
-      let item = {
-        price,
-        tokenId: i.tokenId.toNumber(),
-        seller: i.seller,
-        owner: i.owner,
-        sold: i.sold,
-        image: meta.data.image,
-      }
-      return item
-    }))
-    /* create a filtered array of items that have been sold */
-    const soldItems = items.filter(i => i.sold)
-    setSold(soldItems)
-    setNfts(items)
-    setLoadingState('loaded') 
+      const items = await Promise.all(data.map(async i => {
+        const tokenUri = await tokenContract.tokenURI(i.tokenId)
+        const meta = await axios.get(tokenUri)
+        let price = ethers.utils.formatUnits(i.price.toString(), 'ether')
+        let item = {
+          price,
+          tokenId: i.tokenId.toNumber(),
+          seller: i.seller,
+          owner: i.owner,
+          sold: i.sold,
+          image: meta.data.image,
+        }
+        return item
+      }))
+      /* create a filtered array of items that have been sold */
+      const soldItems = items.filter(i => i.sold)
+      setSold(soldItems)
+      setNfts(items)
+      setLoadingState('loaded') 
+    }
+    else {
+      window.alert('Account not detected. Please ensure your wallet is connected')
+    }
   }
 
   if (loadingState === 'loaded' && !nfts.length) return (<h1 className="py-10 px-20 text-3xl text-white">No assets created</h1>)
@@ -60,7 +65,7 @@ export default function CreatorDashboard() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-start gap-4 pt-4">
           {
             nfts.map((nft, i) => (
-              <div key={i} className="pt-2 shadow-lg rounded-lg overflow-hidden transform transition duration-500 hover:scale-105">
+              <div key={i} className="pt-2 shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 rounded-lg overflow-hidden transform transition duration-500 hover:scale-105">
                 <img src={nft.image} className="rounded-t-lg" onClick={() => window.open(nft.image)} role="button"/>
                 <div className="p-4 bg-black bg-opacity-50">
                   <p className="text-2xl font-bold text-white">Price - {nft.price} CHEF</p>
@@ -78,7 +83,7 @@ export default function CreatorDashboard() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-start gap-4 pt-4">
                 {
                   sold.map((nft, i) => (
-                    <div key={i} className="shadow-lg rounded-lg overflow-hidden transform transition duration-500 hover:scale-105">
+                    <div key={i} className="shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 rounded-lg overflow-hidden transform transition duration-500 hover:scale-105">
                       <img src={nft.image} className="rounded-t-lg" onClick={() => window.open(nft.image)} role="button"/>
                       <div className="p-4 bg-black bg-opacity-50">
                         <p className="text-2xl font-bold text-white">Price - {nft.price} CHEF</p>

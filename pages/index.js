@@ -4,6 +4,8 @@ import axios from 'axios'
 import Web3Modal from "web3modal"
 import Spinner from "./Components/Spinner.js"
 import dynamic from 'next/dynamic'
+import ParallaxLanding from "./Components/Parallax.js"
+import Alerts from "./Components/Alerts.js"
 
 
 import {
@@ -20,6 +22,7 @@ export default function Home() {
   const ReactImageAppear = dynamic(() => import('react-image-appear'), {
       ssr: false
   });
+
   useEffect(() => {
     loadNFTs()
   }, [])
@@ -52,8 +55,10 @@ export default function Home() {
     setNfts(items)
     setLoadingState('loaded') 
   }
+  
   async function buyNft(nft) {
     /* needs the user to sign the transaction, so will use Web3Provider and sign it */
+    try {
     const web3Modal = new Web3Modal()
     const connection = await web3Modal.connect()
     const provider = new ethers.providers.Web3Provider(connection)
@@ -68,35 +73,55 @@ export default function Home() {
     await approval.wait()
     await transaction.wait()
     loadNFTs()
+    }
+    catch(err) {
+      window.alert('You aborted the transaction')
+      console.log(err)
+    }
+    
   }
 
   if (loadingState === 'loaded' && !nfts.length) return (<h1 className="px-20 py-10 text-3xl text-white">No items in marketplace</h1>)
   if (loadingState != 'loaded') return ( < Spinner/>  )
   return (
+    <div>
+    <div className="flex overflow-visible justify-center rounded-xl mx-20 my-6 shadow-lg shadow-purple-500 bg-gradient-to-r from-red-300 to-orange-300 animate-loadtransition" style={{ height: '70vh' }}>
+      <div className="grid grid-rows-2 lg:hidden animate-loadtransition">
+        <div className="flex justify-center">
+          <img src="cheforama-logo-2edit.png" className="h-28 w-28 self-center animate-loadtransition animate-floatation" alt="" />
+        </div>
+        <div>
+          <h2 className="object relative text-5xl text-center text-gray-700 font-semibold z-20 self-center animate-loadtransition px-2">Oui Chef, WeChef<br/><span className="text-2xl">Giving your creations a life on the blockchain</span></h2>
+        </div>
+      </div>
+      <ParallaxLanding/>
+    </div>
     <div className="flex justify-center animate-loadtransition">
-      <div className="px-4 pb-6 " style={{ maxWidth: '1600px' }}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-start gap-4 pt-4">
+      <div className="px-20 pb-6 " style={{ maxWidth: '1600px' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-start gap-10 pt-4">
           {
             nfts.map((nft, i) => (
-              <div key={i} className="group shadow-xl shadow-blue-500/50 rounded-lg overflow-hidden transform transition duration-500 hover:scale-105">                
-                <div className="flex justify-center overflow-hidden">
-                <ReactImageAppear animationDuration="1s" loader="infinityloader.svg" src={nft.image} className="transform transition duration-500 hover:scale-110 " onClick={() => window.open(nft.image)} role="button" />    
+              <div key={i} className="group shadow-xl shadow-purple-500/20 hover:shadow-purple-500/60 rounded-lg overflow-hidden transform transition duration-500 ">                
+                <div className="flex justify-center overflow-hidden ">
+                <ReactImageAppear animationDuration="1s" loader="infinityloader.svg" src={nft.image} className=" transform transition duration-1000 group-hover:scale-110 min" onClick={() => window.open(nft.image)} role="button" />    
                 </div>
                 <div className="p-4 bg-white bg-opacity-5 group-hover:bg-opacity-10 transition duration-500">
                   <p style={{ height: '64px' }} className="text-2xl font-semibold text-gray-200">{nft.name}</p>
-                  <div style={{ height: '70px', overflow: 'hidden' }}>
+                  <div style={{ overflow: 'hidden' }}>
                     <p className="text-gray-200 font-semibold">{nft.description}</p>
                   </div>
+                  
                 </div>
                 <div className="p-4 bg-black bg-opacity-40 group-hover:bg-opacity-50 transition duration-500  ">
                   <p className="text-2xl mb-4 font-bold text-white">{nft.price} CHEF</p>
-                  <button className="w-full bg-pink-500 text-white font-bold py-2 px-2 rounded transform transition duration-500 hover:scale-110" onClick={() => buyNft(nft)}>Buy</button>
+                  <button className="w-full bg-pink-500 text-white font-bold py-2 px-2 rounded transform transition duration-500 hover:scale-110" onClick={window.ethereum ? () => buyNft(nft) : () => window.alert('Account not detected. Please connect wallet')}>Buy</button>
                 </div>
               </div>
             ))
           }
         </div>
       </div>
+    </div>
     </div>
   )
 }

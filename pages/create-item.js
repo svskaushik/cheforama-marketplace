@@ -84,17 +84,17 @@ export default function CreateItem() {
       <div className="w-3/4 sm:w-1/2 flex flex-col pb-12">
         <input 
           placeholder="Asset Name"
-          className="mt-8 rounded p-6 bg-white bg-opacity-20 shadow transition duration-500 hover:shadow-2xl focus:shadow-inner"
+          className="mt-8 rounded p-6 bg-white bg-opacity-20 shadow transition duration-500 hover:shadow-lg hover:shadow-purple-500/50 focus:shadow-xl focus:shadow-purple-700"
           onChange={e => updateFormInput({ ...formInput, name: e.target.value })}
         />
         <textarea
           placeholder="Asset Description"
-          className="mt-4 rounded p-6 bg-white bg-opacity-20 shadow transition duration-500 hover:shadow-2xl focus:shadow-inner"
+          className="mt-4 rounded p-6 bg-white bg-opacity-20 shadow transition duration-500 hover:shadow-lg hover:shadow-purple-500/50 focus:shadow-xl focus:shadow-purple-700"
           onChange={e => updateFormInput({ ...formInput, description: e.target.value })}
         />
         <input
           placeholder="Asset Price in CHEF"
-          className="mt-4 rounded p-6 bg-white bg-opacity-20 shadow transition duration-500 hover:shadow-2xl focus:shadow-inner"
+          className="mt-4 rounded p-6 bg-white bg-opacity-20 shadow transition duration-500 hover:shadow-lg hover:shadow-purple-500/50 focus:shadow-xl focus:shadow-purple-700"
           onChange={e => updateFormInput({ ...formInput, price: e.target.value })}
         />
         <label className="flex flex-col items-center px-4 py-2 mt-4 bg-pink-500 text-white rounded shadow-md tracking-wide font-semibold cursor-pointer transform transition duration-500 hover:scale-105">
