@@ -5,7 +5,6 @@ import Web3Modal from "web3modal"
 import Spinner from "./Components/Spinner.js"
 import dynamic from 'next/dynamic'
 import ParallaxLanding from "./Components/Parallax.js"
-import Alerts from "./Components/Alerts.js"
 
 
 import {
