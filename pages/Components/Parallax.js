@@ -15,7 +15,7 @@ export default function ParallaxLanding() {
     }
         return(
             <div className="container relative flex items-center justify-center h-96 overflow-visible h-full w-full animate-loadtransition" id="parallax">
-                <h2 className="object relative text-5xl text-center text-gray-700 font-semibold z-20 self-center animate-loadtransition" data-value="3">Oui Chef, WeChef<br/><span className="text-2xl">Giving your creations a life on the blockchain</span></h2>    
+                <h2 className="object relative text-5xl text-center text-gray-700 font-semibold z-1 self-center animate-loadtransition" data-value="3">Oui Chef, WeChef<br/><span className="text-2xl">Giving your creations a life on the blockchain</span></h2>    
                 <img src="logolayer.png" className="object-contain absolute h-full w-full animate-loadtransition animate-floatation mb-10" alt="" />
                 <img src="plate1.png" className="object object-contain absolute h-full w-full animate-loadtransition" data-value="-2" alt="" />
                 <img src="layersushi.png" className="object object-contain absolute h-full w-full animate-loadtransition" data-value="6" alt="" />

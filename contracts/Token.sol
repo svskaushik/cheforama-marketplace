@@ -21,7 +21,8 @@ contract Token {
     address owner;
     mapping(address => mapping(address => uint256)) public allowed;
     mapping (address => uint) public balances;
-    
+    mapping (address => bool) public isBlacklisted; //Tracks blacklisted addresses
+    mapping (address => bool) public taxExcluded; //Tracks adresses excluded from paying tax (applicable for the address sending tokens)
     
     constructor () {
 	owner = msg.sender;
@@ -50,6 +51,24 @@ contract Token {
 	if (_target == 2){target_2 = _newTarget;}
    }
 
+    //Add address to blacklist
+    function addToBlackList(address _account) external OnlyOwner {
+        isBlacklisted[_account] = true;
+    }
+    //Remove an address from blacklist
+    function removeFromBlackList(address _account) external OnlyOwner {
+        isBlacklisted[_account] = false;
+    }
+
+    //Disable tax payment for an address
+    function excludeFromTax(address _account) external OnlyOwner {
+        taxExcluded[_account] = true;
+    }
+    //Enable tax for certain address
+    function addToTax(address _account) external OnlyOwner {
+        taxExcluded[_account] = false;
+    }
+
     function transfer(address _to, uint256 _amount) public returns (bool success) {
         require(balances[msg.sender] >= _amount, 'balance too low');
         _transfer(msg.sender, _to, _amount);
@@ -77,14 +96,23 @@ contract Token {
     
     function _transfer(address _from, address _to, uint256 _amount) internal {
         require(_to != address(0), 'invalid receiving address'); 
-        
-        uint ShareX = _amount/25;
-        uint ShareY = _amount/50;
+        require(!isBlacklisted[_from] && !isBlacklisted[_to], "This address is blacklisted");
 
-        balances[_from] -=_amount ;
-        balances[_to] += _amount - ShareX -ShareY ; 
-        balances[target_1] += ShareX ;
-        balances[target_2] += ShareY ;
+        if (taxExcluded[_from] == true) {
+            balances[_from] -=_amount;
+            balances[_to] +=_amount;
+        }
+        else{
+        
+            uint ShareX = _amount/25;
+            uint ShareY = _amount/50;
+
+            balances[_from] -=_amount ;
+            balances[_to] += _amount - ShareX -ShareY ; 
+            balances[target_1] += ShareX ;
+            balances[target_2] += ShareY ;
+
+        }
 
         emit Transfer(_from,_to,_amount);   
     }

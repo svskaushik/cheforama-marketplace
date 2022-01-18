@@ -84,7 +84,7 @@ export default function Home() {
   if (loadingState != 'loaded') return ( < Spinner/>  )
   return (
     <div>
-    <div className="flex overflow-visible justify-center rounded-xl mx-20 my-6 shadow-lg shadow-purple-500 bg-gradient-to-r from-red-300 to-orange-300 animate-loadtransition" style={{ height: '70vh' }}>
+    <div className="flex overflow-visible justify-center rounded-xl mx-5 md:mx-20 my-6 shadow-lg shadow-purple-500 bg-gradient-to-r from-red-300 to-orange-300 animate-loadtransition" style={{ height: '70vh' }}>
       <div className="grid grid-rows-2 lg:hidden animate-loadtransition">
         <div className="flex justify-center">
           <img src="cheforama-logo-2edit.png" className="h-28 w-28 self-center animate-loadtransition animate-floatation" alt="" />
@@ -96,7 +96,7 @@ export default function Home() {
       <ParallaxLanding/>
     </div>
     <div className="flex justify-center animate-loadtransition">
-      <div className="px-20 pb-6 " style={{ maxWidth: '1600px' }}>
+      <div className="px-5 md:px-20 pb-6 " style={{ maxWidth: '1600px' }}>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-start gap-10 pt-4">
           {
             nfts.map((nft, i) => (

@@ -4,6 +4,7 @@ import "../styles/globals.css"
 import "../styles/NProgress.css"
 import Link from 'next/link'
 import WalletConnectButton from "./Components/ConnectButton.js"
+import ModalButton from "./Components/ModalButton.js"
 
 
 Router.events.on("routeChangeStart", nProgress.start);
@@ -53,7 +54,7 @@ function MyApp({ Component, pageProps }) {
             </Link>
           </div>
           <div className="flex">
-            <WalletConnectButton/>
+            <ModalButton/>
           </div>
         </div>  
       </nav>

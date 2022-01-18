@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Web3Modal from "web3modal"
 import Spinner from "./Components/Spinner.js"
+import WalletConnectProvider from "@walletconnect/web3-provider";
 
 import {
   nftmarketaddress, nftaddress
@@ -18,10 +19,24 @@ export default function CreatorDashboard() {
   useEffect(() => {
     loadNFTs()
   }, [])
+
+  const providerOptions = {
+    walletconnect: {
+      package: WalletConnectProvider, // required
+      options: {
+        rpc: {
+            97: 'https://data-seed-prebsc-1-s1.binance.org:8545/'
+        },
+        chainId: 97
+      }
+    }
+  }
+
   async function loadNFTs() {
     if (window.ethereum) {
       const web3Modal = new Web3Modal({
         cacheProvider: true,
+        providerOptions
       })
       const connection = await web3Modal.connect()
       const provider = new ethers.providers.Web3Provider(connection)

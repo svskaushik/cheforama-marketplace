@@ -26,10 +26,14 @@ export default function MyAssets() {
       const connection = await web3Modal.connect()
       const provider = new ethers.providers.Web3Provider(connection)
       const signer = provider.getSigner()
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0x61' }], // chainId must be in hexadecimal numbers
+      });
 
       const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, signer)
       const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider)
-      const data = await marketContract.fetchMyNFTs().catch(window.alert('Account not detected. Please ensure your wallet is connected'))
+      const data = await marketContract.fetchMyNFTs()
 
       const items = await Promise.all(data.map(async i => {
         const tokenUri = await tokenContract.tokenURI(i.tokenId)
