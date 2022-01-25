@@ -3,6 +3,7 @@ import { ethers } from 'ethers'
 import { create as ipfsHttpClient } from 'ipfs-http-client'
 import { useRouter } from 'next/router'
 import Web3Modal from 'web3modal'
+import dynamic from 'next/dynamic'
 
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
 
@@ -18,6 +19,9 @@ export default function CreateItem() {
   const [fileUrl, setFileUrl] = useState(null)
   const [formInput, updateFormInput] = useState({ price: '', name: '', description: '' })
   const router = useRouter()
+  const ReactImageAppear = dynamic(() => import('react-image-appear'), {
+      ssr: false
+  });
 
   async function onChange(e) {
     const file = e.target.files[0]
@@ -36,7 +40,7 @@ export default function CreateItem() {
   }
   async function createMarket() {
     const { name, description, price } = formInput
-    if (!name || !description || !price || !fileUrl) return
+    if (!name || !description || !price || !fileUrl) {alert('Please ensure all fields are filled')}
     /* first, upload to IPFS */
     const data = JSON.stringify({
       name, description, image: fileUrl
@@ -98,7 +102,7 @@ export default function CreateItem() {
           onChange={e => updateFormInput({ ...formInput, price: e.target.value })}
         />
         <label className="flex flex-col items-center px-4 py-2 mt-4 bg-pink-500 text-white rounded shadow-md tracking-wide font-semibold cursor-pointer transform transition duration-500 hover:scale-105">
-        <span className="mt-2 text-base leading-normal">Select a file</span>
+        <span className="mt-2 text-base leading-normal">Select a file </span>
         <input
           type="file"
           name="Asset"
@@ -108,7 +112,7 @@ export default function CreateItem() {
         </label>
         {
           fileUrl && (
-            <img className="rounded mt-4 self-center" width="350" src={fileUrl} />
+            <ReactImageAppear animationDuration="1s" loader="infinityloader.svg" className="rounded mt-4 self-center" width="350" src={fileUrl} />
           )
         }
         <button onClick={createMarket} className="bg-pink-500 text-white tracking-wide transform transition duration-500 hover:scale-105 font-bold mt-4 rounded p-4 shadow-lg">

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import Web3Modal from "web3modal";
-import WalletConnectProvider from "@walletconnect/web3-provider";
+import WalletConnectProvider from "@walletconnect/web3-provider"
 
 
 function ModalButton() {
@@ -81,7 +81,7 @@ function ModalButton() {
 			      package: WalletConnectProvider, // required
 			      options: {
 			        rpc: {
-                        97: 'https://data-seed-prebsc-1-s1.binance.org:8545/'
+                        97: 'https://data-seed-prebsc-2-s2.binance.org:8545/'
                     },
                     chainId: 97
 			      }

@@ -39,12 +39,12 @@ function MyApp({ Component, pageProps }) {
             </Link>
             <Link href="/create-item">
               <a className="rounded-full px-4 transition duration-500 font-semibold hover:bg-black hover:bg-opacity-40 transform hover:-translate-y-1 mr-6 text-pink-500 focus:text-cyan-400 focus:bg-black focus:bg-opacity-40">
-                Sell Digital Asset
+                Create
               </a>
             </Link>
             <Link href="/my-assets">
               <a className="rounded-full px-4 transition duration-500 font-semibold hover:bg-black hover:bg-opacity-40 transform hover:-translate-y-1 mr-6 text-pink-500 focus:text-cyan-400 focus:bg-black focus:bg-opacity-40">
-                My Digital Assets
+                My Assets
               </a>
             </Link>
             <Link href="/creator-dashboard">

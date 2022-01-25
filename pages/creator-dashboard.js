@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Web3Modal from "web3modal"
 import Spinner from "./Components/Spinner.js"
-import WalletConnectProvider from "@walletconnect/web3-provider";
+import WalletConnectProvider from "@walletconnect/web3-provider"
 
 import {
   nftmarketaddress, nftaddress
@@ -18,53 +18,93 @@ export default function CreatorDashboard() {
   const [loadingState, setLoadingState] = useState('not-loaded')
   useEffect(() => {
     loadNFTs()
+    if (window.ethereum){
+      window.ethereum.on("chainChanged", networkChanged)
+    }
   }, [])
+
+  const networkChanged = (chainId) => {
+    if (chainId != '0x61'){
+    window.alert('Please ensure you are connected to the correct network and refresh')
+    }
+  };
 
   const providerOptions = {
     walletconnect: {
       package: WalletConnectProvider, // required
       options: {
         rpc: {
-            97: 'https://data-seed-prebsc-1-s1.binance.org:8545/'
+            97: 'https://data-seed-prebsc-2-s2.binance.org:8545/'
         },
         chainId: 97
       }
     }
   }
 
+
+  async function chainCheck() {
+    try {
+      if (!window.ethereum) throw new Error("No crypto wallet found");
+      await window.ethereum.request({
+        method: "wallet_addEthereumChain",
+        params: [
+          {
+              chainId: `0x${Number(97).toString(16)}`,
+              chainName: "Binance Smart Chain Testnet",
+              nativeCurrency: {
+                name: "Binance Chain Native Token",
+                symbol: "BNB",
+                decimals: 18
+              },
+              rpcUrls: [
+                "https://data-seed-prebsc-2-s2.binance.org:8545/"
+              ],
+              blockExplorerUrls: ["https://explorer.binance.org/smart-testnet"]
+            }
+        ]
+      })
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
   async function loadNFTs() {
     if (window.ethereum) {
-      const web3Modal = new Web3Modal({
-        cacheProvider: true,
-        providerOptions
-      })
-      const connection = await web3Modal.connect()
-      const provider = new ethers.providers.Web3Provider(connection)
-      const signer = provider.getSigner()
+        try{
+        const web3Modal = new Web3Modal({
+          cacheProvider: true,
+          providerOptions
+        })
+        const connection = await web3Modal.connect()
+        const provider = new ethers.providers.Web3Provider(connection)
+        const signer = provider.getSigner()
 
-      const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, signer)
-      const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider)
-      const data = await marketContract.fetchItemsCreated()
+        const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, signer)
+        const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider)
+        const data = await marketContract.fetchItemsCreated()
 
-      const items = await Promise.all(data.map(async i => {
-        const tokenUri = await tokenContract.tokenURI(i.tokenId)
-        const meta = await axios.get(tokenUri)
-        let price = ethers.utils.formatUnits(i.price.toString(), 'ether')
-        let item = {
-          price,
-          tokenId: i.tokenId.toNumber(),
-          seller: i.seller,
-          owner: i.owner,
-          sold: i.sold,
-          image: meta.data.image,
-        }
-        return item
-      }))
-      /* create a filtered array of items that have been sold */
-      const soldItems = items.filter(i => i.sold)
-      setSold(soldItems)
-      setNfts(items)
-      setLoadingState('loaded') 
+        const items = await Promise.all(data.map(async i => {
+          const tokenUri = await tokenContract.tokenURI(i.tokenId)
+          const meta = await axios.get(tokenUri)
+          let price = ethers.utils.formatUnits(i.price.toString(), 'ether')
+          let item = {
+            price,
+            tokenId: i.tokenId.toNumber(),
+            seller: i.seller,
+            owner: i.owner,
+            sold: i.sold,
+            image: meta.data.image,
+          }
+          return item
+        }))
+        /* create a filtered array of items that have been sold */
+        const soldItems = items.filter(i => i.sold)
+        setSold(soldItems)
+        setNfts(items)
+        setLoadingState('loaded') 
+      }catch(error){
+        console.log(error)
+      }
     }
     else {
       window.alert('Account not detected. Please ensure your wallet is connected')

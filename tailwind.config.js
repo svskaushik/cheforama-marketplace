@@ -18,7 +18,7 @@ module.exports = {
       },
       animation: {
         loadtransition : 'loadtransition 1s ease-in-out',
-        pingslow : 'ping 1.2s ease-in-out infinite',
+        pingslow : 'ping 1.5s ease-in-out infinite',
         floatation : 'floatation 3s ease-in-out infinite',
       },  
       backgroundImage: {
@@ -26,6 +26,7 @@ module.exports = {
         'svg': "url('~/img/wave.svg')",
       },
       colors: {
+        'dark' : "#0A1F3A",
       },
     },   
   },

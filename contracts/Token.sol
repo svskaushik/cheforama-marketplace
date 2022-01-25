@@ -84,7 +84,7 @@ contract Token {
 
     function transferFrom(address _from, address _to, uint256 _amount) public returns (bool success) {
         require(_amount <= balances[_from], 'balance too low');
-        require(_amount <= allowed[_from][msg.sender]);
+        require(_amount <= allowed[_from][msg.sender], 'insufficient allowance');
         allowed[_from][msg.sender] -=_amount;
         _transfer(_from, _to, _amount);
         return true;

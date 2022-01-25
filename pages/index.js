@@ -5,7 +5,7 @@ import Web3Modal from "web3modal"
 import Spinner from "./Components/Spinner.js"
 import dynamic from 'next/dynamic'
 import ParallaxLanding from "./Components/Parallax.js"
-
+import WalletConnectProvider from "@walletconnect/web3-provider"
 
 import {
   nftaddress, nftmarketaddress, paymentTokenAddress
@@ -22,12 +22,24 @@ export default function Home() {
       ssr: false
   });
 
+  const providerOptions = {
+    walletconnect: {
+      package: WalletConnectProvider, // required
+      options: {
+        rpc: {
+            97: 'https://data-seed-prebsc-2-s2.binance.org:8545/'
+        },
+        chainId: 97
+      }
+    }
+  }
+
   useEffect(() => {
     loadNFTs()
   }, [])
   async function loadNFTs() {
     /* create a generic provider and query for unsold market items */
-    const provider = new ethers.providers.JsonRpcProvider("https://data-seed-prebsc-1-s1.binance.org:8545/")
+    const provider = new ethers.providers.JsonRpcProvider("https://data-seed-prebsc-2-s2.binance.org:8545/")
     const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider)
     const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, provider)
     const data = await marketContract.fetchMarketItems()
@@ -58,7 +70,10 @@ export default function Home() {
   async function buyNft(nft) {
     /* needs the user to sign the transaction, so will use Web3Provider and sign it */
     try {
-    const web3Modal = new Web3Modal()
+    const web3Modal = new Web3Modal({
+            cacheProvider: true,
+            providerOptions
+    })
     const connection = await web3Modal.connect()
     const provider = new ethers.providers.Web3Provider(connection)
     const signer = provider.getSigner()
@@ -84,7 +99,7 @@ export default function Home() {
   if (loadingState != 'loaded') return ( < Spinner/>  )
   return (
     <div>
-    <div className="flex overflow-visible justify-center rounded-xl mx-5 md:mx-20 my-6 shadow-lg shadow-purple-500 bg-gradient-to-r from-red-300 to-orange-300 animate-loadtransition" style={{ height: '70vh' }}>
+    <div className="flex overflow-visible justify-center rounded-xl mx-5 md:mx-28 my-6 shadow-lg shadow-purple-500 bg-gradient-to-r from-red-300 to-orange-300 animate-loadtransition" style={{ height: '70vh' }}>
       <div className="grid grid-rows-2 lg:hidden animate-loadtransition">
         <div className="flex justify-center">
           <img src="cheforama-logo-2edit.png" className="h-28 w-28 self-center animate-loadtransition animate-floatation" alt="" />
@@ -95,16 +110,21 @@ export default function Home() {
       </div>
       <ParallaxLanding/>
     </div>
+    <div className="justify-center align-center my-10">
+    <p className="text-3xl text-white text-center">
+      Explore Creations
+    </p>
+    </div>
     <div className="flex justify-center animate-loadtransition">
-      <div className="px-5 md:px-20 pb-6 " style={{ maxWidth: '1600px' }}>
+      <div className="px-25 md:px-28 pb-6 " style={{ maxWidth: '1600px' }}>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-start gap-10 pt-4">
           {
             nfts.map((nft, i) => (
-              <div key={i} className="group shadow-xl shadow-purple-500/20 hover:shadow-purple-500/60 rounded-lg overflow-hidden transform transition duration-500 ">                
-                <div className="flex justify-center overflow-hidden ">
+              <div key={i} className="group shadow-xl shadow-purple-500/20 hover:shadow-purple-500/60 rounded-lg overflow-hidden transform transition duration-500 bg-white bg-opacity-10 hover:bg-opacity-15">                
+                <div className="flex justify-center overflow-hidden rounded-lg m-2">
                 <ReactImageAppear animationDuration="1s" loader="infinityloader.svg" src={nft.image} className=" transform transition duration-1000 group-hover:scale-110 min" onClick={() => window.open(nft.image)} role="button" />    
                 </div>
-                <div className="p-4 bg-white bg-opacity-5 group-hover:bg-opacity-10 transition duration-500">
+                <div className="p-4 pt-0">
                   <p style={{ height: '64px' }} className="text-2xl font-semibold text-gray-200">{nft.name}</p>
                   <div style={{ overflow: 'hidden' }}>
                     <p className="text-gray-200 font-semibold">{nft.description}</p>
